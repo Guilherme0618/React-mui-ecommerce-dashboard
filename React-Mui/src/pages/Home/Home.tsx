@@ -4,8 +4,22 @@ import HomeHeader from "../../components/HomeHeader";
 import CategoryTabs from "../../components/CategoryTabs";
 import ProductGrid from "../../components/ProductGrid";
 import LogPanel from "../../components/LogPanel";
+import { useMemo, useState } from "react";
+import { mockProducts } from "../../data/products";
+import type { Category } from "../../types/product";
 
 function Home() {
+  const [selectedCategory, setSelectedCategory] = useState<Category>("Todos");
+
+  const filteredProducts = useMemo(() => {
+    if (selectedCategory === "Todos") {
+      return mockProducts;
+    }
+
+    return mockProducts.filter(
+      (product) => product.category === selectedCategory,
+    );
+  }, [selectedCategory]);
   return (
     <Box
       sx={{
@@ -70,14 +84,16 @@ function Home() {
             display: "flex",
             flexDirection: "column",
             gap: 3,
-            height: "100%",
+            overflowY: "auto",
+            height: 850,
           }}
         >
-          <CategoryTabs />
+          <CategoryTabs
+            selectedCategory={selectedCategory}
+            onSelectCategory={setSelectedCategory}
+          />
 
-          <Box sx={{ flex: 1 }}>
-            <ProductGrid />
-          </Box>
+          <ProductGrid products={filteredProducts} />
         </Box>
       </Box>
     </Box>

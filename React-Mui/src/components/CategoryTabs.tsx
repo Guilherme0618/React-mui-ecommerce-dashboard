@@ -1,6 +1,17 @@
 import { Box, Button } from "@mui/material";
+import type { Category } from "../types/product";
 
-function CategoryTabs() {
+type CategoryTabsProps = {
+  selectedCategory: Category;
+  onSelectCategory: (category: Category) => void;
+};
+
+function CategoryTabs({
+  selectedCategory,
+  onSelectCategory,
+}: CategoryTabsProps) {
+  const categories: Category[] = ["Todos", "Cursos", "Ferramentas", "Produtos"];
+
   return (
     <Box
       sx={{
@@ -9,38 +20,21 @@ function CategoryTabs() {
         flexWrap: "wrap",
       }}
     >
-      <Button
-        size="small"
-        variant="contained"
-        sx={{
-          textTransform: "none",
-          backgroundColor: "secondary.main",
-        }}
-      >
-        Cursos
-      </Button>
-
-      <Button
-        size="small"
-        variant="contained"
-        sx={{
-          textTransform: "none",
-          backgroundColor: "secondary.main",
-        }}
-      >
-        Ferramentas
-      </Button>
-
-      <Button
-        size="small"
-        variant="contained"
-        sx={{
-          textTransform: "none",
-          backgroundColor: "secondary.main",
-        }}
-      >
-        Produtos
-      </Button>
+      {categories.map((category) => (
+        <Button
+          key={category}
+          size="small"
+          variant="contained"
+          onClick={() => onSelectCategory(category)}
+          sx={{
+            textTransform: "none",
+            backgroundColor:
+              selectedCategory === category ? "primary.main" : "secondary.main",
+          }}
+        >
+          {category}
+        </Button>
+      ))}
     </Box>
   );
 }
