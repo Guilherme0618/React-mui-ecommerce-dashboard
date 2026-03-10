@@ -11,28 +11,30 @@ import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import AirlineStopsIcon from "@mui/icons-material/AirlineStops";
 import { useState } from "react";
-import fundoImg from "../../assets/images/fundoImg.png";
-import logoImg from "../../assets/images/logoImg.png";
 
-function Login() {
+function RegisterPage() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
   return (
     <Box
       sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
         backgroundColor: "tertiary.main",
-        display: "grid",
-        gridTemplateColumns: {
-          xs: "1fr",
-          md: "1fr 1fr",
-        },
         minHeight: "100vh",
-        gap: 2,
-        p: 2,
+        width: "100%",
+        gap: 3,
+        px: 2,
+        py: 3,
+        flexDirection: {
+          xs: "column",
+          lg: "row",
+        },
       }}
     >
-      {/* Lado esquerdo */}
+      {/* Lado esquerdo - Registro */}
       <Box
         sx={{
           backgroundColor: "white",
@@ -42,7 +44,8 @@ function Login() {
           p: { xs: 3, sm: 4, md: 6 },
           boxShadow: 3,
           borderRadius: 2,
-          justifyContent: "center",
+          width: "100%",
+          maxWidth: 850,
         }}
       >
         <Box sx={{ mb: 2 }}>
@@ -54,18 +57,20 @@ function Login() {
               mb: 2,
             }}
           >
-            Log in
+            Register
           </Typography>
 
           <Typography
             variant="body1"
             sx={{
+              display: "flex",
+              justifyContent: "center",
               textAlign: "center",
-              color: "text.secondary",
               mb: 2,
+              color: "text.secondary",
             }}
           >
-            Bem-vindo! Por favor, entre utilizando sua conta NEWSHOP.
+            Bem-vindo! Por favor, registre-se para criar sua conta.
           </Typography>
 
           <Typography
@@ -78,13 +83,12 @@ function Login() {
               flexWrap: "wrap",
               color: "primary.main",
               fontFamily: "Poppins, Arial",
-              textAlign: "center",
             }}
           >
-            Novo em NEWSHOP?
+            Já tem uma conta?
             <Link
               component={RouterLink}
-              to="/register"
+              to="/login"
               underline="none"
               sx={{
                 color: "primary.main",
@@ -97,7 +101,7 @@ function Login() {
                 },
               }}
             >
-              Registrar-se Gratuitamente Aqui
+              Log-in NEWSHOP
               <AirlineStopsIcon sx={{ fontSize: "1rem" }} />
             </Link>
           </Typography>
@@ -111,6 +115,7 @@ function Login() {
             gap: 3,
           }}
         >
+          {/* Username */}
           <Box
             sx={{
               width: "100%",
@@ -122,7 +127,6 @@ function Login() {
             }}
           >
             <Typography variant="h6">Username</Typography>
-
             <TextField
               fullWidth
               placeholder="Username"
@@ -135,6 +139,7 @@ function Login() {
             />
           </Box>
 
+          {/* Password */}
           <Box
             sx={{
               width: "100%",
@@ -170,28 +175,12 @@ function Login() {
                 ),
               }}
             />
-
-            <Link
-              component={RouterLink}
-              to="/forgot-password"
-              underline="none"
-              sx={{
-                color: "primary.main",
-                fontWeight: "bold",
-                "&:hover": {
-                  textDecoration: "underline",
-                },
-              }}
-            >
-              Esqueceu sua senha?
-              <AirlineStopsIcon sx={{ fontSize: "1rem", ml: 0.5 }} />
-            </Link>
           </Box>
         </Box>
 
         <Button
           variant="contained"
-          onClick={() => navigate("/home")}
+          onClick={() => navigate("/login")}
           sx={{
             borderRadius: "15px",
             mt: 5,
@@ -205,43 +194,102 @@ function Login() {
             alignSelf: "center",
           }}
         >
-          Entrar
+          Registrar
         </Button>
       </Box>
 
-      {/* Lado direito */}
+      {/* OR - aparece só no desktop */}
       <Box
         sx={{
           display: {
             xs: "none",
-            md: "flex",
+            lg: "flex",
           },
-          color: "white",
-          backgroundColor: "primary.main",
-          backgroundImage: `url(${fundoImg})`,
-          backgroundRepeat: "repeat",
-          backgroundSize: "auto",
-          backgroundPosition: "top left",
-          alignItems: "center",
           justifyContent: "center",
-          textAlign: "center",
-          flexDirection: "column",
-          borderRadius: 2,
-          p: 4,
+          alignItems: "center",
+          backgroundColor: "white",
+          borderRadius: "50%",
+          height: 70,
+          width: 70,
+          boxShadow: 3,
+          fontWeight: "bold",
+          flexShrink: 0,
         }}
       >
-        <Box
-          component="img"
-          src={logoImg}
+        <Typography>OR</Typography>
+      </Box>
+
+      {/* Lado direito - Contas demo */}
+      <Box
+        sx={{
+          backgroundColor: "white",
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+          p: { xs: 3, sm: 4 },
+          boxShadow: 3,
+          borderRadius: 2,
+          width: "100%",
+          maxWidth: 360,
+        }}
+      >
+        <Typography
+          variant="h5"
           sx={{
-            width: "100%",
-            maxWidth: 400,
+            textAlign: "center",
+            color: "primary.main",
+            fontWeight: "bold",
           }}
-        />
-        <Typography variant="h3">Bem-vindo</Typography>
+        >
+          Contas de Demonstração
+        </Typography>
+
+        <Typography
+          variant="body2"
+          sx={{
+            textAlign: "center",
+            color: "text.secondary",
+            mb: 1,
+          }}
+        >
+          Use uma conta pronta para testar as funcionalidades do sistema.
+        </Typography>
+
+        <Button
+          variant="outlined"
+          sx={{
+            textTransform: "none",
+            borderRadius: 2,
+            py: 1.2,
+          }}
+        >
+          Edgar Demo
+        </Button>
+
+        <Button
+          variant="outlined"
+          sx={{
+            textTransform: "none",
+            borderRadius: 2,
+            py: 1.2,
+          }}
+        >
+          Heitor Demo
+        </Button>
+
+        <Button
+          variant="outlined"
+          sx={{
+            textTransform: "none",
+            borderRadius: 2,
+            py: 1.2,
+          }}
+        >
+          Jonas Demo
+        </Button>
       </Box>
     </Box>
   );
 }
 
-export default Login;
+export default RegisterPage;

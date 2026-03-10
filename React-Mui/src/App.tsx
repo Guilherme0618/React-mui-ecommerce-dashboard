@@ -1,14 +1,9 @@
-import { Routes, Route } from "react-router-dom";
-import Login from "./pages/LoginPage/Login";
-import Home from "./pages/Home/Home";
+import AppRoutes from "./routes/AppRoutes";
 
 function App() {
-  return (
-    <Routes>
-      <Route path="/home" element={<Home />} />
-      <Route path="/login" element={<Login />} />
-    </Routes>
-  );
+  const isAuthenticated = true;
+
+  return <AppRoutes isAuthenticated={isAuthenticated} />;
 }
 
 export default App;
