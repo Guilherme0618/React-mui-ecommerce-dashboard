@@ -1,5 +1,9 @@
 import { Box, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import HomeIcon from "@mui/icons-material/Home";
+import QueryStatsIcon from "@mui/icons-material/QueryStats";
+import PersonIcon from "@mui/icons-material/Person";
+import PaymentsIcon from "@mui/icons-material/Payments";
 
 function AppSidebar() {
   const navigate = useNavigate();
@@ -18,6 +22,7 @@ function AppSidebar() {
         sx={{
           color: "white",
           justifyContent: "center",
+          gap: 2,
           borderRadius: 2,
           transition: "all 0.25s ease",
           "&:hover": {
@@ -27,6 +32,7 @@ function AppSidebar() {
           },
         }}
       >
+        <HomeIcon />
         Home
       </Button>
 
@@ -43,6 +49,7 @@ function AppSidebar() {
           sx={{
             color: "white",
             justifyContent: "center",
+            gap: 2,
             borderRadius: 2,
             transition: "all 0.25s ease",
             "&:hover": {
@@ -52,6 +59,7 @@ function AppSidebar() {
             },
           }}
         >
+          <QueryStatsIcon />
           Estatísticas
         </Button>
 
@@ -60,6 +68,7 @@ function AppSidebar() {
           sx={{
             color: "white",
             justifyContent: "center",
+            gap: 2,
             borderRadius: 2,
             transition: "all 0.25s ease",
             "&:hover": {
@@ -69,6 +78,7 @@ function AppSidebar() {
             },
           }}
         >
+          <PersonIcon />
           Área Cliente
         </Button>
 
@@ -77,6 +87,7 @@ function AppSidebar() {
           sx={{
             color: "white",
             justifyContent: "center",
+            gap: 2,
             borderRadius: 2,
             transition: "all 0.25s ease",
             "&:hover": {
@@ -86,6 +97,7 @@ function AppSidebar() {
             },
           }}
         >
+          <PaymentsIcon />
           Vendas
         </Button>
       </Box>

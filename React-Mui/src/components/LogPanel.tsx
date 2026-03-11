@@ -1,5 +1,6 @@
 import { Box, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import HistoryIcon from "@mui/icons-material/History";
 
 function LogPanel() {
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ function LogPanel() {
           },
         }}
       >
+        <HistoryIcon />
         Visualizar Log
       </Button>
     </Box>
