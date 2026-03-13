@@ -40,7 +40,7 @@ function Login() {
           message: "Login efetuado com sucesso!",
         },
       });
-    }, 3000);
+    }, 2000);
   };
 
   return (
