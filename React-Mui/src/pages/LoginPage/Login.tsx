@@ -16,7 +16,32 @@ import logoImg from "../../assets/images/logoImg.png";
 
 function Login() {
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setLoading(true);
+
+    if (username.trim() === "" || password.trim() === "") {
+      setLoading(false);
+      return;
+    }
+
+    setTimeout(() => {
+      setLoading(false);
+      navigate("/home", {
+        state: {
+          showSnackbar: true,
+          message: "Login efetuado com sucesso!",
+        },
+      });
+    }, 3000);
+  };
 
   return (
     <Box
@@ -45,171 +70,183 @@ function Login() {
           justifyContent: "center",
         }}
       >
-        <Box sx={{ mb: 2 }}>
-          <Typography
-            variant="h4"
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              mb: 2,
-            }}
-          >
-            Log in
-          </Typography>
-
-          <Typography
-            variant="body1"
-            sx={{
-              textAlign: "center",
-              color: "text.secondary",
-              mb: 2,
-            }}
-          >
-            Bem-vindo! Por favor, entre utilizando sua conta NEWSHOP.
-          </Typography>
-
-          <Typography
-            variant="body1"
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              gap: 1,
-              flexWrap: "wrap",
-              color: "primary.main",
-              fontFamily: "Poppins, Arial",
-              textAlign: "center",
-            }}
-          >
-            Novo em NEWSHOP?
-            <Link
-              component={RouterLink}
-              to="/register"
-              underline="none"
+        <form onSubmit={handleLogin}>
+          <Box sx={{ mb: 2 }}>
+            <Typography
+              variant="h4"
               sx={{
-                color: "primary.main",
-                fontWeight: "bold",
                 display: "flex",
+                justifyContent: "center",
+                mb: 2,
+              }}
+            >
+              Log in
+            </Typography>
+
+            <Typography
+              variant="body1"
+              sx={{
+                textAlign: "center",
+                color: "text.secondary",
+                mb: 2,
+              }}
+            >
+              Bem-vindo! Por favor, entre utilizando sua conta NEWSHOP.
+            </Typography>
+
+            <Typography
+              variant="body1"
+              sx={{
+                display: "flex",
+                justifyContent: "center",
                 alignItems: "center",
-                gap: 0.5,
-                "&:hover": {
-                  textDecoration: "underline",
-                },
-              }}
-            >
-              Registrar-se Gratuitamente Aqui
-              <AirlineStopsIcon sx={{ fontSize: "1rem" }} />
-            </Link>
-          </Typography>
-        </Box>
-
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: 3,
-          }}
-        >
-          <Box
-            sx={{
-              width: "100%",
-              maxWidth: 700,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-start",
-              gap: 1,
-            }}
-          >
-            <Typography variant="h6">Username</Typography>
-
-            <TextField
-              fullWidth
-              placeholder="Username"
-              variant="outlined"
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  borderRadius: "10px",
-                },
-              }}
-            />
-          </Box>
-
-          <Box
-            sx={{
-              width: "100%",
-              maxWidth: 700,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-start",
-              gap: 1,
-            }}
-          >
-            <Typography variant="h6">Password</Typography>
-
-            <TextField
-              fullWidth
-              type={showPassword ? "text" : "password"}
-              placeholder="Senha"
-              variant="outlined"
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  borderRadius: "10px",
-                },
-              }}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={() => setShowPassword(!showPassword)}
-                      edge="end"
-                    >
-                      {showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-
-            <Link
-              component={RouterLink}
-              to="/forgot-password"
-              underline="none"
-              sx={{
+                gap: 1,
+                flexWrap: "wrap",
                 color: "primary.main",
-                fontWeight: "bold",
-                "&:hover": {
-                  textDecoration: "underline",
-                },
+                fontFamily: "Poppins, Arial",
+                textAlign: "center",
               }}
             >
-              Esqueceu sua senha?
-              <AirlineStopsIcon sx={{ fontSize: "1rem", ml: 0.5 }} />
-            </Link>
+              Novo em NEWSHOP?
+              <Link
+                component={RouterLink}
+                to="/register"
+                underline="none"
+                sx={{
+                  color: "primary.main",
+                  fontWeight: "bold",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 0.5,
+                  "&:hover": {
+                    textDecoration: "underline",
+                  },
+                }}
+              >
+                Registrar-se Gratuitamente Aqui
+                <AirlineStopsIcon sx={{ fontSize: "1rem" }} />
+              </Link>
+            </Typography>
           </Box>
-        </Box>
 
-        <Button
-          variant="contained"
-          onClick={() => navigate("/home")}
-          sx={{
-            borderRadius: "15px",
-            mt: 5,
-            fontSize: "1.1rem",
-            width: {
-              xs: "100%",
-              sm: 300,
-              md: 500,
-            },
-            py: 1.5,
-            alignSelf: "center",
-          }}
-        >
-          Entrar
-        </Button>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 3,
+            }}
+          >
+            <Box
+              sx={{
+                width: "100%",
+                maxWidth: 700,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
+                gap: 1,
+              }}
+            >
+              <Typography variant="h6">Username</Typography>
+
+              <TextField
+                required
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                fullWidth
+                placeholder="Username"
+                variant="outlined"
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "10px",
+                  },
+                }}
+              />
+            </Box>
+
+            <Box
+              sx={{
+                width: "100%",
+                maxWidth: 700,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
+                gap: 1,
+              }}
+            >
+              <Typography variant="h6">Password</Typography>
+
+              <TextField
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                fullWidth
+                type={showPassword ? "text" : "password"}
+                placeholder="Senha"
+                variant="outlined"
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "10px",
+                  },
+                }}
+                slotProps={{
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setShowPassword((prev) => !prev)}
+                          edge="end"
+                        >
+                          {showPassword ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  },
+                }}
+              />
+
+              <Link
+                component={RouterLink}
+                to="/forgot-password"
+                underline="none"
+                sx={{
+                  color: "primary.main",
+                  fontWeight: "bold",
+                  "&:hover": {
+                    textDecoration: "underline",
+                  },
+                }}
+              >
+                Esqueceu sua senha?
+                <AirlineStopsIcon sx={{ fontSize: "1rem", ml: 0.5 }} />
+              </Link>
+            </Box>
+          </Box>
+
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
+            <Button
+              variant="contained"
+              type="submit"
+              loading={loading}
+              sx={{
+                borderRadius: "15px",
+                mt: 5,
+                fontSize: "1.1rem",
+                width: {
+                  xs: "100%",
+                  sm: 300,
+                  md: 500,
+                },
+                py: 1.5,
+              }}
+            >
+              Entrar
+            </Button>
+          </Box>
+        </form>
       </Box>
 
-      {/* Lado direito */}
+      {/* Lado Esquerdo*/}
       <Box
         sx={{
           display: {

@@ -14,7 +14,27 @@ import { useState } from "react";
 
 function RegisterPage() {
   const navigate = useNavigate();
+
   const [showPassword, setShowPassword] = useState(false);
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setLoading(true);
+
+    if (username.trim() === "" || password.trim() === "") {
+      setLoading(false);
+      alert("Preencha username e password.");
+      return;
+    }
+
+    setTimeout(() => {
+      setLoading(false);
+      navigate("/home");
+    }, 3000);
+  };
 
   return (
     <Box
@@ -48,154 +68,169 @@ function RegisterPage() {
           maxWidth: 850,
         }}
       >
-        <Box sx={{ mb: 2 }}>
-          <Typography
-            variant="h4"
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              mb: 2,
-            }}
-          >
-            Register
-          </Typography>
-
-          <Typography
-            variant="body1"
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              textAlign: "center",
-              mb: 2,
-              color: "text.secondary",
-            }}
-          >
-            Bem-vindo! Por favor, registre-se para criar sua conta.
-          </Typography>
-
-          <Typography
-            variant="body1"
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              gap: 1,
-              flexWrap: "wrap",
-              color: "primary.main",
-              fontFamily: "Poppins, Arial",
-            }}
-          >
-            Já tem uma conta?
-            <Link
-              component={RouterLink}
-              to="/login"
-              underline="none"
+        <form onSubmit={handleLogin}>
+          <Box sx={{ mb: 2 }}>
+            <Typography
+              variant="h4"
               sx={{
-                color: "primary.main",
-                fontWeight: "bold",
                 display: "flex",
-                alignItems: "center",
-                gap: 0.5,
-                "&:hover": {
-                  textDecoration: "underline",
-                },
+                justifyContent: "center",
+                mb: 2,
               }}
             >
-              Log-in NEWSHOP
-              <AirlineStopsIcon sx={{ fontSize: "1rem" }} />
-            </Link>
-          </Typography>
-        </Box>
+              Register
+            </Typography>
 
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: 3,
-          }}
-        >
-          {/* Username */}
-          <Box
-            sx={{
-              width: "100%",
-              maxWidth: 700,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-start",
-              gap: 1,
-            }}
-          >
-            <Typography variant="h6">Username</Typography>
-            <TextField
-              fullWidth
-              placeholder="Username"
-              variant="outlined"
+            <Typography
+              variant="body1"
               sx={{
-                "& .MuiOutlinedInput-root": {
-                  borderRadius: "10px",
-                },
+                display: "flex",
+                justifyContent: "center",
+                textAlign: "center",
+                mb: 2,
+                color: "text.secondary",
               }}
-            />
+            >
+              Bem-vindo! Por favor, registre-se para criar sua conta.
+            </Typography>
+
+            <Typography
+              variant="body1"
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: 1,
+                flexWrap: "wrap",
+                color: "primary.main",
+                fontFamily: "Poppins, Arial",
+              }}
+            >
+              Já tem uma conta?
+              <Link
+                component={RouterLink}
+                to="/login"
+                underline="none"
+                sx={{
+                  color: "primary.main",
+                  fontWeight: "bold",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 0.5,
+                  "&:hover": {
+                    textDecoration: "underline",
+                  },
+                }}
+              >
+                Log-in NEWSHOP
+                <AirlineStopsIcon sx={{ fontSize: "1rem" }} />
+              </Link>
+            </Typography>
           </Box>
 
-          {/* Password */}
           <Box
             sx={{
-              width: "100%",
-              maxWidth: 700,
               display: "flex",
               flexDirection: "column",
-              alignItems: "flex-start",
-              gap: 1,
+              alignItems: "center",
+              gap: 3,
             }}
           >
-            <Typography variant="h6">Password</Typography>
-
-            <TextField
-              fullWidth
-              type={showPassword ? "text" : "password"}
-              placeholder="Senha"
-              variant="outlined"
+            {/* Username */}
+            <Box
               sx={{
-                "& .MuiOutlinedInput-root": {
-                  borderRadius: "10px",
-                },
+                width: "100%",
+                maxWidth: 700,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
+                gap: 1,
               }}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={() => setShowPassword(!showPassword)}
-                      edge="end"
-                    >
-                      {showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Box>
-        </Box>
+            >
+              <Typography variant="h6">Username</Typography>
+              <TextField
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                fullWidth
+                placeholder="Username"
+                variant="outlined"
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "10px",
+                  },
+                }}
+              />
+            </Box>
 
-        <Button
-          variant="contained"
-          onClick={() => navigate("/login")}
-          sx={{
-            borderRadius: "15px",
-            mt: 5,
-            fontSize: "1.1rem",
-            width: {
-              xs: "100%",
-              sm: 300,
-              md: 500,
-            },
-            py: 1.5,
-            alignSelf: "center",
-          }}
-        >
-          Registrar
-        </Button>
+            {/* Password */}
+            <Box
+              sx={{
+                width: "100%",
+                maxWidth: 700,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
+                gap: 1,
+              }}
+            >
+              <Typography variant="h6">Password</Typography>
+
+              <TextField
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                fullWidth
+                type={showPassword ? "text" : "password"}
+                placeholder="Senha"
+                variant="outlined"
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "10px",
+                  },
+                }}
+                slotProps={{
+                  input: {
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => setShowPassword((prev) => !prev)}
+                          edge="end"
+                        >
+                          {showPassword ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  },
+                }}
+              />
+            </Box>
+          </Box>
+
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <Button
+              variant="contained"
+              type="submit"
+              loading={loading}
+              sx={{
+                borderRadius: "15px",
+                mt: 5,
+                fontSize: "1.1rem",
+                width: {
+                  xs: "100%",
+                  sm: 300,
+                  md: 500,
+                },
+                py: 1.5,
+              }}
+            >
+              Registrar
+            </Button>
+          </Box>
+        </form>
       </Box>
 
       {/* OR - aparece só no desktop */}
