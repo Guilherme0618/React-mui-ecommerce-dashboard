@@ -21,11 +21,24 @@ Este projeto foi desenvolvido com foco em boas práticas de arquitetura frontend
 ## 📂 Estrutura
 
 src/
- ├── components/
- ├── pages/
- ├── services/
- ├── hooks/
- ├── theme/
+ ├── assets/        # Imagens, ícones e arquivos estáticos
+ ├── components/    # Componentes reutilizáveis da aplicação
+ ├── data/          # Dados mockados utilizados no projeto
+ ├── hooks/         # Hooks customizados
+ ├── pages/         # Páginas principais da aplicação
+ ├── routes/        # Configuração de rotas da aplicação
+ ├── services/      # Camada de serviços (API, Firebase futuramente)
+ ├── theme/         # Configuração do tema do Material UI
+ ├── types/         # Tipagens TypeScript globais
+ ├── App.tsx        # Componente raiz da aplicação
+ └── main.tsx       # Ponto de entrada da aplicação
+
+ ## 🔮 Melhorias futuras
+
+- Integração com Firebase Authentication
+- Persistência de dados com Firestore
+- Cadastro de usuários
+- Dashboard com métricas
 
 ## ▶️ Executar
 
