@@ -1,6 +1,20 @@
-import { Avatar, Box, Button, TextField } from "@mui/material";
+import { Box, Button, TextField } from "@mui/material";
+import UserAvatarMenu from "./UserAvatarMenu";
+import { useNavigate } from "react-router-dom";
 
 function HomeHeader() {
+  const navigate = useNavigate();
+
+  const handleEditProfile = () => {
+    console.log("Editar perfil");
+    navigate("");
+  };
+
+  const handleLogout = () => {
+    console.log("Logout");
+    navigate("/login");
+  };
+
   return (
     <Box
       sx={{
@@ -33,6 +47,7 @@ function HomeHeader() {
           display: "flex",
           alignItems: "center",
           gap: 2,
+          flexShrink: 0,
         }}
       >
         <Button
@@ -46,13 +61,11 @@ function HomeHeader() {
           Add
         </Button>
 
-        <Avatar
-          sx={{
-            width: 34,
-            height: 34,
-            bgcolor: "#f2f2f2",
-            color: "#200F3B",
-          }}
+        <UserAvatarMenu
+          userName="Guilherme"
+          userEmail="guilherme@email.com"
+          onEditProfile={handleEditProfile}
+          onLogout={handleLogout}
         />
       </Box>
     </Box>
