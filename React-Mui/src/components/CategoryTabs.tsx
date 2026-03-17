@@ -1,5 +1,6 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, CircularProgress } from "@mui/material";
 import type { Category } from "../types/product";
+import { useState } from "react";
 
 type CategoryTabsProps = {
   selectedCategory: Category;
@@ -12,6 +13,17 @@ function CategoryTabs({
 }: CategoryTabsProps) {
   const categories: Category[] = ["Todos", "Cursos", "Ferramentas", "Produtos"];
 
+  const [loadingCategory, setLoadingCategory] = useState<Category | null>(null);
+
+  function handleSelectCategory(category: Category) {
+    setLoadingCategory(category);
+
+    setTimeout(() => {
+      onSelectCategory(category);
+      setLoadingCategory(null);
+    }, 800);
+  }
+
   return (
     <Box
       sx={{
@@ -20,21 +32,33 @@ function CategoryTabs({
         flexWrap: "wrap",
       }}
     >
-      {categories.map((category) => (
-        <Button
-          key={category}
-          size="small"
-          variant="contained"
-          onClick={() => onSelectCategory(category)}
-          sx={{
-            textTransform: "none",
-            backgroundColor:
-              selectedCategory === category ? "primary.main" : "secondary.main",
-          }}
-        >
-          {category}
-        </Button>
-      ))}
+      {categories.map((category) => {
+        const isLoading = loadingCategory === category;
+
+        return (
+          <Button
+            key={category}
+            size="small"
+            variant="contained"
+            onClick={() => handleSelectCategory(category)}
+            disabled={loadingCategory !== null}
+            sx={{
+              textTransform: "none",
+              minWidth: 130,
+              backgroundColor:
+                selectedCategory === category
+                  ? "primary.main"
+                  : "secondary.main",
+            }}
+          >
+            {isLoading ? (
+              <CircularProgress size={18} color="inherit" />
+            ) : (
+              category
+            )}
+          </Button>
+        );
+      })}
     </Box>
   );
 }

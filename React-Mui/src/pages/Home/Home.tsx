@@ -4,27 +4,28 @@ import HomeHeader from "../../components/HomeHeader";
 import CategoryTabs from "../../components/CategoryTabs";
 import ProductGrid from "../../components/ProductGrid";
 import LogPanel from "../../components/LogPanel";
+import AddProductDialog from "../../components/AddProductDialog";
 import { useMemo, useState, useEffect } from "react";
 import { mockProducts } from "../../data/products";
-import type { Category } from "../../types/product";
+import type { Category, Product } from "../../types/product";
 import { useLocation, useNavigate } from "react-router-dom";
 
 function Home() {
   const [selectedCategory, setSelectedCategory] = useState<Category>("Todos");
   const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [openAddDialog, setOpenAddDialog] = useState(false);
+  const [products, setProducts] = useState<Product[]>(mockProducts);
 
   const location = useLocation();
   const navigate = useNavigate();
 
   const filteredProducts = useMemo(() => {
     if (selectedCategory === "Todos") {
-      return mockProducts;
+      return products;
     }
 
-    return mockProducts.filter(
-      (product) => product.category === selectedCategory,
-    );
-  }, [selectedCategory]);
+    return products.filter((product) => product.category === selectedCategory);
+  }, [selectedCategory, products]);
 
   useEffect(() => {
     if (location.state?.showSnackbar) {
@@ -42,6 +43,11 @@ function Home() {
     setOpenSnackbar(false);
   };
 
+  function handleAddProduct(newProduct: Product) {
+    setProducts((prevProducts) => [newProduct, ...prevProducts]);
+    setOpenAddDialog(false);
+  }
+
   return (
     <>
       <Box
@@ -57,7 +63,7 @@ function Home() {
           },
         }}
       >
-        {/* Coluna esquerda */}
+        {/* Sidebar */}
         <Box
           sx={{
             display: { xs: "none", md: "grid" },
@@ -87,8 +93,7 @@ function Home() {
             <LogPanel />
           </Box>
         </Box>
-
-        {/* Coluna direita */}
+        {/* Main Content */}
         <Box
           sx={{
             display: "grid",
@@ -96,7 +101,7 @@ function Home() {
             gridTemplateRows: "70px 1fr",
           }}
         >
-          <HomeHeader />
+          <HomeHeader onOpenAddDialog={() => setOpenAddDialog(true)} />
 
           <Box
             sx={{
@@ -120,6 +125,12 @@ function Home() {
           </Box>
         </Box>
       </Box>
+
+      <AddProductDialog
+        open={openAddDialog}
+        onClose={() => setOpenAddDialog(false)}
+        onAddProduct={handleAddProduct}
+      />
 
       <Snackbar
         open={openSnackbar}
