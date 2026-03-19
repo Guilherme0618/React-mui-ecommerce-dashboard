@@ -45,7 +45,7 @@ function AppSidebar() {
         }}
       >
         <Button
-          onClick={() => navigate("/login")}
+          onClick={() => navigate("/statistics")}
           sx={{
             color: "white",
             justifyContent: "center",
@@ -64,7 +64,7 @@ function AppSidebar() {
         </Button>
 
         <Button
-          onClick={() => navigate("/login")}
+          onClick={() => navigate("/customers")}
           sx={{
             color: "white",
             justifyContent: "center",
@@ -79,11 +79,11 @@ function AppSidebar() {
           }}
         >
           <PersonIcon />
-          Área Cliente
+          Clientes
         </Button>
 
         <Button
-          onClick={() => navigate("/login")}
+          onClick={() => navigate("/sales")}
           sx={{
             color: "white",
             justifyContent: "center",

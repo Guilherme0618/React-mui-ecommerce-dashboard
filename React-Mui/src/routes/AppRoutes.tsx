@@ -5,6 +5,9 @@ import RegisterPage from "../pages/Register/RegisterPage";
 import ProtectedRoute from "../components/ProtectedRoute";
 import PublicRoute from "../components/PublicRoute";
 import ForgetPassword from "../pages/ForgotPassword/ForgotPassword";
+import StatisticsPage from "../pages/StatisticsPage/StatiscsPage";
+import CustomerData from "../pages/CustomerData/CustomerData";
+import SalesPage from "../pages/SalesPage/SalesPage";
 
 type AppRoutesProps = {
   isAuthenticated: boolean;
@@ -46,6 +49,33 @@ function AppRoutes({ isAuthenticated }: AppRoutesProps) {
         element={
           <ProtectedRoute isAuthenticated={isAuthenticated}>
             <Home />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/statistics"
+        element={
+          <ProtectedRoute isAuthenticated={isAuthenticated}>
+            <StatisticsPage />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/customers"
+        element={
+          <ProtectedRoute isAuthenticated={isAuthenticated}>
+            <CustomerData />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/sales"
+        element={
+          <ProtectedRoute isAuthenticated={isAuthenticated}>
+            <SalesPage />
           </ProtectedRoute>
         }
       />
