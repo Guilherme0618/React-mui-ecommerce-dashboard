@@ -6,6 +6,7 @@ import {
   InputAdornment,
   IconButton,
   Link,
+  Alert,
 } from "@mui/material";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
@@ -13,34 +14,51 @@ import AirlineStopsIcon from "@mui/icons-material/AirlineStops";
 import { useState } from "react";
 import fundoImg from "../../assets/images/fundoImg.png";
 import logoImg from "../../assets/images/logoImg.png";
+import { loginWithEmail } from "../../services/authService";
 
 function Login() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
-  const [username, setUsername] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
   const [loading, setLoading] = useState<boolean>(false);
+  const [requestError, setRequestError] = useState("");
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setRequestError("");
     setLoading(true);
 
-    if (username.trim() === "" || password.trim() === "") {
+    if (!email.trim() || !password.trim()) {
+      setRequestError("Preencha e-mail e senha.");
       setLoading(false);
       return;
     }
 
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      await loginWithEmail(email, password);
+
       navigate("/home", {
         state: {
           showSnackbar: true,
           message: "Login efetuado com sucesso!",
         },
       });
-    }, 2000);
+    } catch (error: any) {
+      if (error.code === "auth/invalid-credential") {
+        setRequestError("E-mail ou senha inválidos.");
+      } else if (error.code === "auth/too-many-requests") {
+        setRequestError("Muitas tentativas. Tente novamente mais tarde.");
+      } else {
+        console.error("Firebase error:", error.code, error.message);
+
+        setRequestError("Não foi possível entrar agora.");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -57,7 +75,7 @@ function Login() {
         p: 2,
       }}
     >
-      {/* Lado esquerdo */}
+      {/* Formulario login */}
       <Box
         sx={{
           backgroundColor: "white",
@@ -74,22 +92,14 @@ function Login() {
           <Box sx={{ mb: 2 }}>
             <Typography
               variant="h4"
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                mb: 2,
-              }}
+              sx={{ display: "flex", justifyContent: "center", mb: 2 }}
             >
               Log in
             </Typography>
 
             <Typography
               variant="body1"
-              sx={{
-                textAlign: "center",
-                color: "text.secondary",
-                mb: 2,
-              }}
+              sx={{ textAlign: "center", color: "text.secondary", mb: 2 }}
             >
               Bem-vindo! Por favor, entre utilizando sua conta NEWSHOP.
             </Typography>
@@ -147,14 +157,15 @@ function Login() {
                 gap: 1,
               }}
             >
-              <Typography variant="h6">Username</Typography>
+              <Typography variant="h6">E-mail</Typography>
 
               <TextField
                 required
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 fullWidth
-                placeholder="Username"
+                type="email"
+                placeholder="Digite seu e-mail"
                 variant="outlined"
                 sx={{
                   "& .MuiOutlinedInput-root": {
@@ -221,13 +232,19 @@ function Login() {
                 <AirlineStopsIcon sx={{ fontSize: "1rem", ml: 0.5 }} />
               </Link>
             </Box>
+
+            {requestError && (
+              <Alert severity="error" sx={{ width: "100%", maxWidth: 700 }}>
+                {requestError}
+              </Alert>
+            )}
           </Box>
 
           <Box sx={{ display: "flex", justifyContent: "center" }}>
             <Button
               variant="contained"
               type="submit"
-              loading={loading}
+              disabled={loading}
               sx={{
                 borderRadius: "15px",
                 mt: 5,
@@ -240,19 +257,15 @@ function Login() {
                 py: 1.5,
               }}
             >
-              Entrar
+              {loading ? "Entrando..." : "Entrar"}
             </Button>
           </Box>
         </form>
       </Box>
-
-      {/* Lado Esquerdo*/}
+      {/* img Direita */}
       <Box
         sx={{
-          display: {
-            xs: "none",
-            md: "flex",
-          },
+          display: { xs: "none", md: "flex" },
           color: "white",
           backgroundColor: "primary.main",
           backgroundImage: `url(${fundoImg})`,
@@ -270,10 +283,7 @@ function Login() {
         <Box
           component="img"
           src={logoImg}
-          sx={{
-            width: "100%",
-            maxWidth: 400,
-          }}
+          sx={{ width: "100%", maxWidth: 400 }}
         />
         <Typography variant="h3">Bem-vindo</Typography>
       </Box>

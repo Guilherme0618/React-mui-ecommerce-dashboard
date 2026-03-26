@@ -2,13 +2,14 @@ import { useState } from "react";
 import { Box, Typography, TextField, Button, Link, Alert } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import AirlineStopsIcon from "@mui/icons-material/AirlineStops";
+import { forgotPassword } from "../../services/authService";
 
 function ForgetPassword() {
-  const [email, setEmail] = useState<string>("");
-  const [emailError, setEmailError] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
-  const [successMessage, setSuccessMessage] = useState<string>("");
-  const [requestError, setRequestError] = useState<string>("");
+  const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [requestError, setRequestError] = useState("");
 
   function validateEmail(value: string): string {
     if (!value.trim()) {
@@ -41,13 +42,15 @@ function ForgetPassword() {
     setLoading(true);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      await forgotPassword(email);
 
       setSuccessMessage(
         "Se existir uma conta vinculada a este e-mail, enviaremos as instruções para redefinição de senha.",
       );
       setEmail("");
-    } catch (error) {
+    } catch (error: any) {
+      console.error("Firebase error:", error.code, error.message);
+
       setRequestError(
         "Não foi possível processar sua solicitação agora. Tente novamente em instantes.",
       );
@@ -213,7 +216,7 @@ function ForgetPassword() {
             <Button
               variant="contained"
               type="submit"
-              loading={loading}
+              disabled={loading}
               sx={{
                 borderRadius: "15px",
                 fontSize: "1.1rem",
@@ -221,7 +224,7 @@ function ForgetPassword() {
                 py: 1.5,
               }}
             >
-              Resetar Senha
+              {loading ? "Enviando..." : "Resetar Senha"}
             </Button>
           </Box>
         </form>

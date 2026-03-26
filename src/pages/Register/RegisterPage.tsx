@@ -6,34 +6,58 @@ import {
   InputAdornment,
   IconButton,
   Link,
+  Alert,
 } from "@mui/material";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import AirlineStopsIcon from "@mui/icons-material/AirlineStops";
 import { useState } from "react";
+import { registerWithEmail } from "../../services/authService";
 
 function RegisterPage() {
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
-  const [username, setUsername] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [requestError, setRequestError] = useState("");
 
-  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setRequestError("");
     setLoading(true);
 
-    if (username.trim() === "" || password.trim() === "") {
+    if (!email.trim() || !password.trim()) {
+      setRequestError("Preencha e-mail e senha.");
       setLoading(false);
-      alert("Preencha username e password.");
       return;
     }
 
-    setTimeout(() => {
+    try {
+      await registerWithEmail(email, password);
+
+      navigate("/login", {
+        state: {
+          showSnackbar: true,
+          message: "Conta criada com sucesso!",
+        },
+      });
+    } catch (error: any) {
+      if (error.code === "auth/email-already-in-use") {
+        setRequestError("Este e-mail já está em uso.");
+      } else if (error.code === "auth/invalid-email") {
+        setRequestError("E-mail inválido.");
+      } else if (error.code === "auth/weak-password") {
+        setRequestError("A senha deve ter pelo menos 6 caracteres.");
+      } else {
+        console.error("Firebase error:", error.code, error.message);
+
+        setRequestError("Não foi possível criar a conta.");
+      }
+    } finally {
       setLoading(false);
-      navigate("/home");
-    }, 3000);
+    }
   };
 
   return (
@@ -54,7 +78,6 @@ function RegisterPage() {
         },
       }}
     >
-      {/* Lado esquerdo - Registro */}
       <Box
         sx={{
           backgroundColor: "white",
@@ -68,15 +91,11 @@ function RegisterPage() {
           maxWidth: 850,
         }}
       >
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleRegister}>
           <Box sx={{ mb: 2 }}>
             <Typography
               variant="h4"
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                mb: 2,
-              }}
+              sx={{ display: "flex", justifyContent: "center", mb: 2 }}
             >
               Register
             </Typography>
@@ -136,7 +155,6 @@ function RegisterPage() {
               gap: 3,
             }}
           >
-            {/* Username */}
             <Box
               sx={{
                 width: "100%",
@@ -147,12 +165,14 @@ function RegisterPage() {
                 gap: 1,
               }}
             >
-              <Typography variant="h6">Username</Typography>
+              <Typography variant="h6">E-mail</Typography>
+
               <TextField
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 fullWidth
-                placeholder="Username"
+                type="email"
+                placeholder="Digite seu e-mail"
                 variant="outlined"
                 sx={{
                   "& .MuiOutlinedInput-root": {
@@ -162,7 +182,6 @@ function RegisterPage() {
               />
             </Box>
 
-            {/* Password */}
             <Box
               sx={{
                 width: "100%",
@@ -203,18 +222,19 @@ function RegisterPage() {
                 }}
               />
             </Box>
+
+            {requestError && (
+              <Alert severity="error" sx={{ width: "100%", maxWidth: 700 }}>
+                {requestError}
+              </Alert>
+            )}
           </Box>
 
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-            }}
-          >
+          <Box sx={{ display: "flex", justifyContent: "center" }}>
             <Button
               variant="contained"
               type="submit"
-              loading={loading}
+              disabled={loading}
               sx={{
                 borderRadius: "15px",
                 mt: 5,
@@ -227,101 +247,10 @@ function RegisterPage() {
                 py: 1.5,
               }}
             >
-              Registrar
+              {loading ? "Registrando..." : "Registrar"}
             </Button>
           </Box>
         </form>
-      </Box>
-
-      {/* OR - aparece só no desktop */}
-      <Box
-        sx={{
-          display: {
-            xs: "none",
-            lg: "flex",
-          },
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "white",
-          borderRadius: "50%",
-          height: 70,
-          width: 70,
-          boxShadow: 3,
-          fontWeight: "bold",
-          flexShrink: 0,
-        }}
-      >
-        <Typography>OR</Typography>
-      </Box>
-
-      {/* Lado direito - Contas demo */}
-      <Box
-        sx={{
-          backgroundColor: "white",
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-          p: { xs: 3, sm: 4 },
-          boxShadow: 3,
-          borderRadius: 2,
-          width: "100%",
-          maxWidth: 360,
-        }}
-      >
-        <Typography
-          variant="h5"
-          sx={{
-            textAlign: "center",
-            color: "primary.main",
-            fontWeight: "bold",
-          }}
-        >
-          Contas de Demonstração
-        </Typography>
-
-        <Typography
-          variant="body2"
-          sx={{
-            textAlign: "center",
-            color: "text.secondary",
-            mb: 1,
-          }}
-        >
-          Use uma conta pronta para testar as funcionalidades do sistema.
-        </Typography>
-
-        <Button
-          variant="outlined"
-          sx={{
-            textTransform: "none",
-            borderRadius: 2,
-            py: 1.2,
-          }}
-        >
-          Edgar Demo
-        </Button>
-
-        <Button
-          variant="outlined"
-          sx={{
-            textTransform: "none",
-            borderRadius: 2,
-            py: 1.2,
-          }}
-        >
-          Heitor Demo
-        </Button>
-
-        <Button
-          variant="outlined"
-          sx={{
-            textTransform: "none",
-            borderRadius: 2,
-            py: 1.2,
-          }}
-        >
-          Jonas Demo
-        </Button>
       </Box>
     </Box>
   );
